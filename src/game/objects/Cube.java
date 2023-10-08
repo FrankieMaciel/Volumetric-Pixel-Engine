@@ -28,15 +28,15 @@ public class Cube {
     float zHalf = zSize / 2;
 
     v = new float[][] {
-      {-xHalf, -yHalf ,-zHalf},
-      {+xHalf, -yHalf ,-zHalf},
-      {+xHalf, +yHalf ,-zHalf},
-      {-xHalf, +yHalf ,-zHalf},
+      {-xHalf, -yHalf ,-zHalf}, // 0
+      {+xHalf, -yHalf ,-zHalf}, // 1
+      {+xHalf, +yHalf ,-zHalf}, // 2
+      {-xHalf, +yHalf ,-zHalf}, // 3
 
-      {-xHalf, -yHalf ,+zHalf},
-      {+xHalf, -yHalf ,+zHalf},
-      {+xHalf, +yHalf ,+zHalf},
-      {-xHalf, +yHalf ,+zHalf},
+      {-xHalf, -yHalf ,+zHalf}, // 4
+      {+xHalf, -yHalf ,+zHalf}, // 5
+      {+xHalf, +yHalf ,+zHalf}, // 6
+      {-xHalf, +yHalf ,+zHalf}, // 7
     };
 
     rotateX(v, angleX);

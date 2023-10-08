@@ -8,30 +8,28 @@ import game.objects.Camera;
 
 public class KeyControlls {
 
-    Camera cam = new Camera();
-
-    public KeyControlls(JFrame myFrame) {
+    public KeyControlls(JFrame myFrame, Camera camera) {
         myFrame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
 
                 if (keyCode == KeyEvent.VK_W) {
-                    cam.forward(1);
+                    camera.forward(10);
                 } else if (keyCode == KeyEvent.VK_A) {
-                    cam.left(1);
+                    camera.left(10);
                 } else if (keyCode == KeyEvent.VK_S) {
-                    cam.backward(1);
+                    camera.backward(10);
                 } else if (keyCode == KeyEvent.VK_D) {
-                    cam.rigth(1);
+                    camera.rigth(10);
                 } else if (keyCode == KeyEvent.VK_SHIFT) {
-                    cam.up(1);
+                    camera.up(10);
                 } else if (keyCode == KeyEvent.VK_CONTROL) {
-                    cam.down(1);
+                    camera.down(10);
                 }
-                System.out.println(cam.x);
-                System.out.println(cam.y);
-                System.out.println(cam.z);
+                System.out.println(camera.x);
+                System.out.println(camera.y);
+                System.out.println(camera.z);
             }
         });
     }

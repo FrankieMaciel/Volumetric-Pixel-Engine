@@ -33,7 +33,15 @@ public class Run {
     angleFun += 0.1f;
     if (angleFun >= 360f) angleFun = 0;
 
-    Cube cube = new Cube(200f, 200f, 0f, 100, 100, 100, angleFun, angleFun, 0f);
+    float cubeInitPosX = 200f;
+    float cubeInitPosY = 200f;
+    float cubeInitPosZ = 0f;
+
+    float cubePosx = cubeInitPosX - window.cam.x;
+    float cubePosy = cubeInitPosY - window.cam.y;
+    float cubePosz = cubeInitPosZ - window.cam.z;
+    
+    Cube cube = new Cube(cubePosx, cubePosy, cubePosz, 100, 100, 100, angleFun, angleFun, angleFun);
     gameRenderer.drawCube(cube);
   }
 }

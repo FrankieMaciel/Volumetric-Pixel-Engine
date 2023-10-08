@@ -1,6 +1,9 @@
 package engine.core;
 
 import javax.swing.*;
+
+import game.objects.Camera;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -13,6 +16,8 @@ public class Window extends JPanel {
     private BufferedImage imagem;
     private int largura = 400;
     private int altura = 400;
+
+    public Camera cam = new Camera();
 
     public Window() {
         imagem = new BufferedImage(largura, altura, BufferedImage.TYPE_INT_RGB);
@@ -45,7 +50,7 @@ public class Window extends JPanel {
             int windowHeight = Integer.parseInt(properties.getProperty("window.height"));
 
             JFrame frame = new JFrame(title);
-            new KeyControlls(frame);
+            new KeyControlls(frame, cam);
             frame.setSize(windowWidth, windowHeight);
             frame.add(this);
             frame.pack();
