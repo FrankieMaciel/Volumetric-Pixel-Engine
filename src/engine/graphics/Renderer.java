@@ -8,24 +8,58 @@ import game.objects.Cube;
 public class Renderer {
 
   Window window;
+  private int pixelSize = 10;
 
   public Renderer(Window w) {
     window = w;
   }
 
-  private void drawFace(
+  private void drawLine(
         float[] v1,
         float[] v2,
-        float[] v3,
-        float[] v4,
         Color color
-) {
-    
-  drawLine(v1[0], v1[1], v2[0], v2[1], color);
-  drawLine(v2[0], v2[1], v3[0], v3[1], color);
-  drawLine(v3[0], v3[1], v4[0], v4[1], color);
-  drawLine(v4[0], v4[1], v1[0], v1[1], color);
-}
+  ) {
+
+    float dx = v2[0] - v1[0];
+    float dy = v2[1] - v1[1];
+
+    float length = (float) Math.sqrt(dx * dx + dy * dy);
+    float angle = (float) Math.atan2(dy, dx);
+
+    for (int i = 0; i < length; i++) {
+
+        int nx = (int) (v1[0] + Math.cos(angle) * i);
+        int ny = (int) (v1[1] + Math.sin(angle) * i);
+
+        window.drawPixel(nx, ny, 1, color);
+    }
+  }
+
+  public void drawFace(
+    float[] v1,
+    float[] v2,
+    float[] v3,
+    float[] v4,
+    Color color
+  ) {
+
+    float dx = v4[0] - v1[0];
+    float dy = v4[1] - v1[1];
+
+    float length = (float) Math.sqrt(dx * dx + dy * dy);
+    float angle = (float) Math.atan2(dy, dx);
+
+    for (int i = 0; i < length; i++) {
+
+        int nx = (int) (Math.cos(angle) * i);
+        int ny = (int) (Math.sin(angle) * i);
+
+        float[] vv1 = {v1[0] + nx, v1[1] + ny}; 
+        float[] vv2 = {v2[0] + nx, v2[1] + ny};
+
+        drawLine(vv1, vv2, color);
+    }
+  }
 
   public void drawCube(Cube cube) {
 
@@ -61,45 +95,25 @@ public class Renderer {
       Color.YELLOW
     );
 
-    drawFace(
-      cube.v[3],
-      cube.v[2],
-      cube.v[6],
-      cube.v[7],
-      Color.PINK
-    );
+    // drawFace(
+    //   cube.v[3],
+    //   cube.v[2],
+    //   cube.v[6],
+    //   cube.v[7],
+    //   Color.PINK
+    // );
 
-    drawFace(
-      cube.v[0],
-      cube.v[1],
-      cube.v[5],
-      cube.v[4],
-      Color.WHITE
-    );
+    // drawFace(
+    //   cube.v[0],
+    //   cube.v[1],
+    //   cube.v[5],
+    //   cube.v[4],
+    //   Color.WHITE
+    // );
+  } 
+
+  private int RoundPixel(float value) {
+    return (int) (Math.floor(value / pixelSize) * pixelSize);
   }
 
-  private void drawLine(float x1, float y1, float x2, float y2, Color color) {
-
-    int numOfDivision = 4;
-    
-    float dx = Math.abs(x2 - x1);
-    float dy = Math.abs(y2 - y1);
-
-    int xSteps = (int) (dx / numOfDivision);
-    int ySteps = (int) (dy / numOfDivision);
-
-    xSteps = x1 < x2 ? xSteps : -xSteps;
-    ySteps = y1 < y2 ? ySteps : -ySteps;
-
-    int nx = (int) x1;
-    int ny = (int) y1;
-
-    for (int x = 0; x < numOfDivision; x++) {
-
-      window.drawPixel(nx, ny, 8,color);
-
-      nx += xSteps;
-      ny += ySteps;
-    }
-  }
 }

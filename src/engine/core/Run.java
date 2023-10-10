@@ -30,7 +30,7 @@ public class Run {
   }
 
   public void onTick() {
-    angleFun += 0.1f;
+    angleFun += 0.05f;
     if (angleFun >= 360f) angleFun = 0;
 
     float cubeInitPosX = 200f;

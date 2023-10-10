@@ -69,8 +69,8 @@ public class Window extends JPanel {
 
     public void drawPixel(int x, int y, int size, Color cor) {
 
-        for (int i = -(size / 2); i < size / 2; i++) {
-            for (int j = -(size / 2); j < size / 2; j++) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
                 if (x + i >= 0 && x + i < largura && y + j >= 0 && y + j < altura) {
                     imagem.setRGB(x + i, y + j, cor.getRGB());
                 }
