@@ -1,9 +1,14 @@
 package engine.graphics;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import engine.core.Window;
-import game.objects.Cube;
+import engine.graphics.volumetric.Cube;
+import engine.graphics.volumetric.Face;
 
 public class Renderer {
 
@@ -35,6 +40,33 @@ public class Renderer {
     }
   }
 
+  public void drawTrapezoid(
+    float[] topLeft,
+    float[] topRight,
+    float[] bottomLeft,
+    float[] bottomRight,
+    Color color
+  ) {
+    // Calculate the midpoints of the top and bottom edges
+    float[] topMid = {(topLeft[0] + topRight[0]) / 2, (topLeft[1] + topRight[1]) / 2};
+    float[] bottomMid = {(bottomLeft[0] + bottomRight[0]) / 2, (bottomLeft[1] + bottomRight[1]) / 2};
+
+    // Draw the two triangles that form the trapezoid
+    drawTriangle(topLeft, topRight, bottomRight, color);
+    drawTriangle(topLeft, bottomLeft, bottomRight, color);
+  }
+
+  public void drawTriangle(
+    float[] v1,
+    float[] v2,
+    float[] v3,
+    Color color
+  ) {
+      drawLine(v1, v2, color);
+      drawLine(v2, v3, color);
+      drawLine(v3, v1, color);
+  }
+
   public void drawFace(
     float[] v1,
     float[] v2,
@@ -54,6 +86,9 @@ public class Renderer {
         int nx = (int) (Math.cos(angle) * i);
         int ny = (int) (Math.sin(angle) * i);
 
+        // nx = dx < 0 ? -nx : nx;
+        // ny = dy < 0 ? -ny : ny;
+
         float[] vv1 = {v1[0] + nx, v1[1] + ny}; 
         float[] vv2 = {v2[0] + nx, v2[1] + ny};
 
@@ -63,54 +98,42 @@ public class Renderer {
 
   public void drawCube(Cube cube) {
 
-    drawFace(
-      cube.v[0],
-      cube.v[1],
-      cube.v[2],
-      cube.v[3],
-      Color.GREEN
-    );
+    List<Face> faces = new ArrayList<>();
+    float[][] cv = cube.getPoints(window.cam);
 
-    drawFace(
-      cube.v[1],
-      cube.v[5],
-      cube.v[6],
-      cube.v[2],
-      Color.RED
-    );
+    faces.add(new Face(cv[0],cv[1],cv[2],cv[3],Color.GREEN));
+    faces.add(new Face(cv[5],cv[4],cv[7],cv[6],Color.YELLOW));
 
-    drawFace(
-      cube.v[4],
-      cube.v[0],
-      cube.v[3],
-      cube.v[7],
-      Color.BLUE
-    );
+    faces.add(new Face(cv[2],cv[6],cv[5],cv[1],Color.BLUE));
+    faces.add(new Face(cv[7],cv[3],cv[0],cv[4],Color.RED));
 
-    drawFace(
-      cube.v[5],
-      cube.v[4],
-      cube.v[7],
-      cube.v[6],
-      Color.YELLOW
-    );
+    faces.add(new Face(cv[2],cv[3],cv[7],cv[6],Color.PINK));
+    faces.add(new Face(cv[0],cv[4],cv[5],cv[1],Color.WHITE));
 
-    // drawFace(
-    //   cube.v[3],
-    //   cube.v[2],
-    //   cube.v[6],
-    //   cube.v[7],
-    //   Color.PINK
-    // );
+    Collections.sort(faces, new CameraDistanceComparator());
 
-    // drawFace(
-    //   cube.v[0],
-    //   cube.v[1],
-    //   cube.v[5],
-    //   cube.v[4],
-    //   Color.WHITE
-    // );
+    for (Face face : faces) {
+      // if (face.isFacingCamera(window.cam)) {
+        drawTrapezoid(face.v1, face.v2, face.v3, face.v4, face.color);
+      // }
+    }
   } 
+
+  static class CameraDistanceComparator implements Comparator<Face> {
+    @Override
+    public int compare(Face face1, Face face2) {
+        double distance1 = face1.calculateAverageDistance();
+        double distance2 = face2.calculateAverageDistance();
+
+        if (distance1 < distance2) {
+            return 1;
+        } else if (distance1 > distance2) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+  }
 
   private int RoundPixel(float value) {
     return (int) (Math.floor(value / pixelSize) * pixelSize);

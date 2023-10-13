@@ -1,10 +1,11 @@
 package engine.core;
 
 import javax.swing.*;
+
+import engine.entities.Camera;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
-import game.objects.Camera;
 
 public class KeyControlls {
 

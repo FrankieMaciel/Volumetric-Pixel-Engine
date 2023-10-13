@@ -4,14 +4,75 @@ import javax.swing.*;
 import java.awt.event.*;
 
 import engine.graphics.Renderer;
-import game.objects.Cube;
+import engine.graphics.volumetric.Cube;
 
 public class Run {
 
   private Window window = new Window();
   Renderer gameRenderer = new Renderer(window);
 
-  float angleFun = 0;
+  float cubeInitPosX = 10;
+  float cubeInitPosY = 10f;
+  float cubeInitPosZ = 20f;
+  Cube cube = new Cube(
+    cubeInitPosX,
+    cubeInitPosY,
+    cubeInitPosZ,
+    10,
+    10,
+    10,
+    0f,
+    0f,
+    0f
+    );
+
+    Cube cube2 = new Cube(
+    -10f,
+    -10f,
+    20f,
+    10,
+    10,
+    10,
+    0f,
+    0f,
+    0f
+    );
+
+    Cube cube3 = new Cube(
+    10f,
+    -10f,
+    20f,
+    10,
+    10,
+    10,
+    0f,
+    0f,
+    0f
+    );
+
+    Cube cube4 = new Cube(
+    -10f,
+    10f,
+    20f,
+    10,
+    10,
+    10,
+    0f,
+    0f,
+    0f
+    );
+
+    Cube cube5 = new Cube(
+    0f,
+    0f,
+    20f,
+    10,
+    10,
+    10,
+    0f,
+    0f,
+    0f
+    );
   
   public Run() {
     SwingUtilities.invokeLater(() -> {
@@ -29,19 +90,19 @@ public class Run {
     });
   }
 
+
+
   public void onTick() {
-    angleFun += 0.05f;
-    if (angleFun >= 360f) angleFun = 0;
 
-    float cubeInitPosX = 200f;
-    float cubeInitPosY = 200f;
-    float cubeInitPosZ = 0f;
-
-    float cubePosx = cubeInitPosX - window.cam.x;
-    float cubePosy = cubeInitPosY - window.cam.y;
-    float cubePosz = cubeInitPosZ - window.cam.z;
+    cube5.rotateX(0.1f);
+    // cube2.rotateX(0.1f);
+    // cube.rotateY(0.1f);
+    // cube.rotateZ(0.1f);
     
-    Cube cube = new Cube(cubePosx, cubePosy, cubePosz, 100, 100, 100, angleFun, angleFun, angleFun);
     gameRenderer.drawCube(cube);
+    gameRenderer.drawCube(cube2);
+    gameRenderer.drawCube(cube3);
+    gameRenderer.drawCube(cube4);
+    gameRenderer.drawCube(cube5);
   }
 }

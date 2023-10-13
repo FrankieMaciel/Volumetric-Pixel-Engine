@@ -2,7 +2,7 @@ package engine.core;
 
 import javax.swing.*;
 
-import game.objects.Camera;
+import engine.entities.Camera;
 
 import java.io.FileInputStream;
 import java.io.IOException;

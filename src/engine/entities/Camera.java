@@ -1,4 +1,4 @@
-package game.objects;
+package engine.entities;
 
 public class Camera {
   public int x = 0;
