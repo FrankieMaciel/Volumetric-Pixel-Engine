@@ -2,6 +2,7 @@ package engine.graphics.volumetric;
 
 import java.util.Arrays;
 
+import engine.core.Window;
 import engine.entities.Camera;
 
 public class Cube {
@@ -109,7 +110,7 @@ public class Cube {
     return (float) (xy / z * Math.tan(angleRadians / 2));
   }
 
-  public float[][] getPoints(Camera cam) {
+  public float[][] getPoints(Camera cam, Window w) {
 
     float[][] ccv = new float[v.length][3];
 
@@ -121,10 +122,10 @@ public class Cube {
 
       ccv[i][0] = transform2DTo3D(dx, dz);
       ccv[i][1] = transform2DTo3D(dy, dz);
-      ccv[i][2] = v[i][2] + z;
+      ccv[i][2] = dz;
 
-      ccv[i][0] += (ccv[i][0] * 400) + (400 / 2);
-      ccv[i][1] += (ccv[i][1] * 400) + (400 / 2);
+      ccv[i][0] += (ccv[i][0] * w.altura) + (w.largura / 2);
+      ccv[i][1] += (ccv[i][1] * w.altura) + (w.altura / 2);
     }
 
     return ccv;

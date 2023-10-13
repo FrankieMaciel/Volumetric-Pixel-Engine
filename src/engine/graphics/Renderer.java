@@ -86,9 +86,6 @@ public class Renderer {
         int nx = (int) (Math.cos(angle) * i);
         int ny = (int) (Math.sin(angle) * i);
 
-        // nx = dx < 0 ? -nx : nx;
-        // ny = dy < 0 ? -ny : ny;
-
         float[] vv1 = {v1[0] + nx, v1[1] + ny}; 
         float[] vv2 = {v2[0] + nx, v2[1] + ny};
 
@@ -99,7 +96,7 @@ public class Renderer {
   public void drawCube(Cube cube) {
 
     List<Face> faces = new ArrayList<>();
-    float[][] cv = cube.getPoints(window.cam);
+    float[][] cv = cube.getPoints(window.cam, window);
 
     faces.add(new Face(cv[0],cv[1],cv[2],cv[3],Color.GREEN));
     faces.add(new Face(cv[5],cv[4],cv[7],cv[6],Color.YELLOW));
@@ -114,6 +111,9 @@ public class Renderer {
 
     for (Face face : faces) {
       // if (face.isFacingCamera(window.cam)) {
+
+        if (face.v1[2] < 0 && face.v2[2] < 0 & face.v3[2] < 0 & face.v4[2] < 0) continue;
+
         drawTrapezoid(face.v1, face.v2, face.v3, face.v4, face.color);
       // }
     }
