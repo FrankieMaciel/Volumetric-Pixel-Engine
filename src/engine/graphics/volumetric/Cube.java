@@ -17,6 +17,8 @@ public class Cube {
 
   private float[][] v;
   public float[][] cv;
+
+  public boolean isOffScreen = false;
   
   public Cube(
           float xpos,
@@ -106,26 +108,76 @@ public class Cube {
   }
 
   private float transform2DTo3D(float xy, float z) {
-    float angleRadians = (float ) ((45.0 / 180) * Math.PI);
+    float angleRadians = (float ) ((90.0 / 180) * Math.PI);
     return (float) (xy / z * Math.tan(angleRadians / 2));
+  }
+
+  private boolean checkIsOffScreen(float x, float y, Window w) {
+    boolean isXoff = x < 0 || x > w.largura;
+    boolean isYoff = y < 0 || y > w.altura;
+    return !isXoff && !isYoff;
+  }
+
+  public float[] rotateXcam(float angle, float ny, float nz) {
+    float cosA = (float) Math.cos(angle);
+    float sinA = (float) Math.sin(angle);
+
+    float y = ny;
+    float z = nz;
+    ny = y * cosA - z * sinA;
+    nz = y * sinA + z * cosA;
+    float[] result = {ny, nz};
+    return result;
+  }
+
+  public float[] rotateYcam(float angle, float nx, float nz) {
+    float cosA = (float) Math.cos(angle);
+    float sinA = (float) Math.sin(angle);
+
+    float x = nx;
+    float z = nz;
+    nx = x * cosA + z * sinA;
+    nz = -x * sinA + z * cosA;
+    float[] result = {nx, nz};
+    return result;
+  }
+
+  public float[] rotateZcam(float angle, float nx, float ny) {
+    float cosA = (float) Math.cos(angle);
+    float sinA = (float) Math.sin(angle);
+
+    float x = nx;
+    float y = ny;
+    nx = x * cosA - y * sinA;
+    ny = x * sinA + y * cosA;
+    float[] result = {nx, ny};
+    return result;
   }
 
   public float[][] getPoints(Camera cam, Window w) {
 
+    isOffScreen = true;
+
     float[][] ccv = new float[v.length][3];
 
     for (int i = 0; i < ccv.length; i++) {
-
+      
       float dx = (v[i][0] + x) - cam.x;
       float dy = (v[i][1] + y) - cam.y;
       float dz = (v[i][2] + z) - cam.z;
 
-      ccv[i][0] = transform2DTo3D(dx, dz);
-      ccv[i][1] = transform2DTo3D(dy, dz);
-      ccv[i][2] = dz;
+      float[] rx = rotateXcam(cam.anglex, dy, dz);
+      float[] ry = rotateYcam(cam.angley, dx, rx[1]);
+      // float[] rz = rotateZcam(cam.anglex, ry[0], rx[0]);
 
+      ccv[i][0] = transform2DTo3D(ry[0], ry[1]);
+      ccv[i][1] = transform2DTo3D(rx[0], ry[1]);
+      ccv[i][2] = ry[1];
+      
       ccv[i][0] += (ccv[i][0] * w.altura) + (w.largura / 2);
       ccv[i][1] += (ccv[i][1] * w.altura) + (w.altura / 2);
+      
+      if(checkIsOffScreen(ccv[i][0], ccv[i][1], w)) isOffScreen = false;
     }
 
     return ccv;

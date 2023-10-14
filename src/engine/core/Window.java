@@ -6,6 +6,8 @@ import engine.entities.Camera;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 import java.awt.image.BufferedImage;
 import java.awt.*;
@@ -14,16 +16,20 @@ import java.awt.event.*;
 public class Window extends JPanel {
 
     private BufferedImage imagem;
+    private Graphics2D g;
     public int largura = 400;
     public int altura = 400;
 
     public Camera cam = new Camera();
+    public KeyControlls controlls;
+    public MouseControls mControlls;
 
     public Window() {
 
         try {
             Properties properties = new Properties();
-            FileInputStream input = new FileInputStream("config/config.properties");
+            Path diretorio = Paths.get("config", "config.properties");
+            FileInputStream input = new FileInputStream(diretorio.toString());
             properties.load(input);
             input.close();
 
@@ -36,7 +42,8 @@ public class Window extends JPanel {
             String title = properties.getProperty("game.title");
 
             JFrame frame = new JFrame(title);
-            new KeyControlls(frame, cam);
+            controlls = new KeyControlls(frame, cam);
+            mControlls = new MouseControls(frame, cam, controlls);
             frame.setSize(largura, altura);
             frame.add(this);
             frame.pack();
@@ -52,7 +59,7 @@ public class Window extends JPanel {
                 largura = getWidth();
                 altura = getHeight();
                 BufferedImage novaImagem = new BufferedImage(largura, altura, BufferedImage.TYPE_INT_RGB);
-                Graphics2D g = novaImagem.createGraphics();
+                g = novaImagem.createGraphics();
                 g.drawImage(imagem, 0, 0, largura, altura, null);
                 g.dispose();
                 imagem = novaImagem;
@@ -71,13 +78,12 @@ public class Window extends JPanel {
 
     public void drawPixel(int x, int y, int size, Color cor) {
 
+        if (x + 10 > largura || x - 10 < 0) return;
+        if (y + 10 > altura || y - 10 < 0) return;
+
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (x + i >= 0 && x + i < largura && y + j >= 0 && y + j < altura) {
-
-                    if (x + 10 + i > largura || x - 10 + i < 0) continue;
-                    if (y + 10 + j > altura || y - 10 + j < 0) continue;
-
                     imagem.setRGB(x + i, y + j, cor.getRGB());
                 }
                 repaint();
@@ -88,5 +94,12 @@ public class Window extends JPanel {
     public void clear() {
         repaint();
         imagem = new BufferedImage(this.largura, this.altura, BufferedImage.TYPE_INT_RGB);
+    }
+
+    public void writeText(String text, int x, int y, Color c) {
+        Font font = new Font("Arial", Font.PLAIN, 48);
+        imagem.getGraphics().setFont(font);
+        imagem.getGraphics().setColor(c);
+        imagem.getGraphics().drawString(text, x, y);
     }
 }

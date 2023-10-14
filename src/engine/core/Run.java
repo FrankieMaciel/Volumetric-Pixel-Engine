@@ -1,6 +1,8 @@
 package engine.core;
 
 import javax.swing.*;
+
+import java.awt.Color;
 import java.awt.event.*;
 
 import engine.graphics.Renderer;
@@ -11,9 +13,13 @@ public class Run {
   private Window window = new Window();
   Renderer gameRenderer = new Renderer(window);
 
+  int camx, camy, camz;
+  float camxangle, camyangle, camzangle;
+  String gameInfo;
+
   float cubeInitPosX = 10;
   float cubeInitPosY = 10f;
-  float cubeInitPosZ = 20f;
+  float cubeInitPosZ = 40f;
   Cube cube = new Cube(
     cubeInitPosX,
     cubeInitPosY,
@@ -29,7 +35,7 @@ public class Run {
     Cube cube2 = new Cube(
     -10f,
     -10f,
-    20f,
+    40f,
     10,
     10,
     10,
@@ -41,7 +47,7 @@ public class Run {
     Cube cube3 = new Cube(
     10f,
     -10f,
-    20f,
+    40f,
     10,
     10,
     10,
@@ -53,7 +59,7 @@ public class Run {
     Cube cube4 = new Cube(
     -10f,
     10f,
-    20f,
+    40f,
     10,
     10,
     10,
@@ -65,7 +71,7 @@ public class Run {
     Cube cube5 = new Cube(
     0f,
     0f,
-    20f,
+    40f,
     10,
     10,
     10,
@@ -81,7 +87,9 @@ public class Run {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-          window.clear();
+          if (!window.controlls.isPaused) {
+            window.clear();
+          }
           onTick();
         }
         
@@ -94,6 +102,10 @@ public class Run {
 
   public void onTick() {
 
+    if (window.controlls.isPaused) return;
+
+    window.controlls.updateCamera();
+
     cube5.rotateX(0.1f);
     // cube2.rotateX(0.1f);
     // cube.rotateY(0.1f);
@@ -104,5 +116,22 @@ public class Run {
     gameRenderer.drawCube(cube3);
     gameRenderer.drawCube(cube4);
     gameRenderer.drawCube(cube5);
+
+    camx = window.cam.x;
+    camy = window.cam.y;
+    camz = window.cam.z;
+
+    camxangle = window.cam.anglex;
+    camyangle = window.cam.angley;
+    camzangle = window.cam.anglez;
+
+    gameInfo = "X: " + String.valueOf(camx) +
+                " | Y: " + String.valueOf(camy) +
+                " | Z: " + String.valueOf(camz) +
+                " | Xangle: " + String.valueOf(camxangle) +
+                " | Yangle: " + String.valueOf(camyangle) +
+                " | Zangle: " + String.valueOf(camzangle);
+
+    window.writeText(gameInfo, 15, 20, Color.WHITE);
   }
 }

@@ -98,6 +98,8 @@ public class Renderer {
     List<Face> faces = new ArrayList<>();
     float[][] cv = cube.getPoints(window.cam, window);
 
+    if (cube.isOffScreen) return;
+
     faces.add(new Face(cv[0],cv[1],cv[2],cv[3],Color.GREEN));
     faces.add(new Face(cv[5],cv[4],cv[7],cv[6],Color.YELLOW));
 
@@ -112,7 +114,7 @@ public class Renderer {
     for (Face face : faces) {
       // if (face.isFacingCamera(window.cam)) {
 
-        if (face.v1[2] < 0 && face.v2[2] < 0 & face.v3[2] < 0 & face.v4[2] < 0) continue;
+        if (face.v1[2] < 20 && face.v2[2] < 20 & face.v3[2] < 20 & face.v4[2] < 20) continue;
 
         drawTrapezoid(face.v1, face.v2, face.v3, face.v4, face.color);
       // }
