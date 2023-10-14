@@ -17,7 +17,7 @@ public class Run {
   float camxangle, camyangle, camzangle;
   String gameInfo;
 
-  float cubeInitPosX = 10;
+  float cubeInitPosX = 20;
   float cubeInitPosY = 10f;
   float cubeInitPosZ = 40f;
   Cube cube = new Cube(
@@ -25,19 +25,19 @@ public class Run {
     cubeInitPosY,
     cubeInitPosZ,
     10,
+    20,
     10,
-    10,
-    0f,
+    10f,
     0f,
     0f
     );
 
     Cube cube2 = new Cube(
     -10f,
-    -10f,
-    40f,
+    -20f,
+    50f,
     10,
-    10,
+    20,
     10,
     0f,
     0f,
@@ -45,22 +45,22 @@ public class Run {
     );
 
     Cube cube3 = new Cube(
-    10f,
-    -10f,
+    5f,
+    -40f,
     40f,
+    20,
     10,
-    10,
-    10,
+    30,
     0f,
     0f,
     0f
     );
 
     Cube cube4 = new Cube(
-    -10f,
-    10f,
+    -20f,
     40f,
-    10,
+    30f,
+    20,
     10,
     10,
     0f,
@@ -71,7 +71,7 @@ public class Run {
     Cube cube5 = new Cube(
     0f,
     0f,
-    40f,
+    -40f,
     10,
     10,
     10,
